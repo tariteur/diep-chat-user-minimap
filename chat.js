@@ -24,6 +24,23 @@ let userCountONOFF = false;
 let PlayerPos = [];
 let name = "";
 
+function hookMethod(target, callback) {
+    const context = CanvasRenderingContext2D.prototype;
+    context[target] = new Proxy(context[target], {
+        apply(type, _this, args) {
+            callback(_this, args);
+            return type.apply(_this, args);
+        },
+    });
+}
+hookMethod('fillText', (thisArg, args) => {
+    const text = args[0];
+    if (text.includes("Score:")) {
+        window.DiepScore = parseInt(text.replace("Score:", "").replace(",", ""));
+        player_count._score(window.DiepScore);
+    }
+});
+
 /// minimap position
 function toMinimapPosition(vector) {
   var unscale = arena.unscale(vector);
