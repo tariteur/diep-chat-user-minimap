@@ -18,6 +18,19 @@ const canvas = document.getElementById('canvas');
 const ctx2 = canvas.getContext("2d");
 const ctx = backgroundOverlay.ctx;
 
+let playersList = [];
+let playersScore;
+let userCountONOFF = false;
+let PlayerPos = [];
+let name = "";
+
+/// minimap position
+function toMinimapPosition(vector) {
+  var unscale = arena.unscale(vector);
+  var minimapPos = Vector.multiply(minimap.minimapDim, unscale);
+  return Vector.add(minimap.minimapPos, minimapPos);
+}
+/// user Part
 class Player_count {
   constructor() {
     this._connect();
@@ -37,7 +50,7 @@ class Player_count {
     // Send the server our name
     this._socket.send(
       new TextEncoder().encode(
-        JSON.stringify({ type: "playerName", playerName: name })
+        JSON.stringify({ type: "playerName", playerName: localStorage.name })
       )
     );
   }
@@ -151,24 +164,20 @@ function displayChat(text, playerName) {
         setTimeout(() => emoticonElement.remove(), 1000);
     }, 10000);
 }
-
-function Playershow(){
-PlayerPos.forEach((player) => {
-    if (Date.now() - player.time < 10000) {
-    const playersMinimapPos = toMinimapPosition(player.PlayerPos);
-    ctx2.save();
-    ctx2.globalAlpha = 1;
-    ctx2.fillStyle = "black";
-    ctx2.beginPath();
-    ctx2.arc(playersMinimapPos.x, playersMinimapPos.y, 3 * window.devicePixelRatio, 0, 2 * Math.PI);
-    ctx2.fill();
-    ctx2.restore();
-    }
-});
-}
-
+setInterval(() => player_count._position(), 500);
 game.once('ready', () => {
     game.on('frame', () => {
-            Playershow()
+    PlayerPos.forEach((player) => {
+        if (Date.now() - player.time < 10000) {
+            const playersMinimapPos = toMinimapPosition(player.PlayerPos);
+            ctx2.save();
+            ctx2.globalAlpha = 1;
+            ctx2.fillStyle = "black";
+            ctx2.beginPath();
+            ctx2.arc(playersMinimapPos.x, playersMinimapPos.y, 3 * window.devicePixelRatio, 0, 2 * Math.PI);
+            ctx2.fill();
+            ctx2.restore();
+        }
+    });
     });
 });
