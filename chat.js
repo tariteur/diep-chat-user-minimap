@@ -1,3 +1,23 @@
+// ==UserScript==
+// @name         New Diep.io chat + users minimap
+// @namespace    http://tampermonkey.net/
+// @version      1
+// @description  made by tariteur
+// @author       tariteur
+// @match        https://diep.io/
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=diep.io
+// @require      https://greasyfork.org/scripts/456843-diep-shortcut/code/diep_Shortcut.js?version=1144520
+// @require      https://raw.githubusercontent.com/tariteur/DiepAPI-remix/main/diepAPI.js
+// @grant        none
+// ==/UserScript==
+const { Canvas } = window.diep_Shortcut.core;
+const { Vector, CanvasKit } = window.diepAPI.core;
+const { scaling, player, game, minimap, arena } = window.diepAPI.apis;
+const { backgroundOverlay } = window.diepAPI.tools;
+const canvas = document.getElementById('canvas');
+const ctx2 = canvas.getContext("2d");
+const ctx = backgroundOverlay.ctx;
+
 class Player_count {
   constructor() {
     this._connect();
