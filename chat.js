@@ -54,7 +54,7 @@ class Player_count {
   }
   _connect() {
     this._socket = new WebSocket(
-      "wss://gravel-slender-spectroscope.glitch.me/"
+      "wss://mon-chat.glitch.me/"
     );
     this._socket.binaryType = "arraybuffer";
     this._socket.addEventListener("message", (e) => this._onmessage(e));
